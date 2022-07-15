@@ -2,8 +2,6 @@
 Export the Environment Variables before running the Script
 export AWS_REGION=us-west-2
 export AWS_PROFILE=test          #update your profile credentials in .aws/config file
-export AWS_BACKEND=Demo          #tag
-export AWS_TENANT=Test           #tag
 '''
 
 import boto3
@@ -11,7 +9,7 @@ import os
 import sys
 import time
 
-REQUIRED_ENV_VARS = {"AWS_BACKEND", "AWS_TENANT", "AWS_PROFILE", "AWS_REGION"}
+REQUIRED_ENV_VARS = {"AWS_PROFILE", "AWS_REGION"}
 diff = REQUIRED_ENV_VARS.difference(os.environ)
 if len(diff) > 0:
     print('Failed because {} are not set'.format(diff))
@@ -19,8 +17,6 @@ if len(diff) > 0:
 
 env_var = os.environ
 if {"RCX_BACKEND", "RCX_TENANT", "AWS_PROFILE", "AWS_REGION"} <= env_var.keys():
-    backend = os.environ['AWS_BACKEND']
-    tenant = os.environ['AWS_TENANT']
     profile = os.environ['AWS_PROFILE']
     region = os.environ['AWS_REGION']
 
@@ -30,11 +26,11 @@ AMI_IMAGE_ID = 'ami-098e42ae54c764c35'       #Amazon-linux-2 ami-id in  us-west(
 INSTANCE_TYPE = 't2.micro'
 DISK_SIZE_GB = 8
 DEVICE_NAME = '/dev/xvda'
-SUBNET_ID = 'subnet-08f113a47da93fc8d'             #select subnet-id in which you want to launch instance
-SECURITY_GROUPS_IDS = ['sg-0ae3ccce276ad946e']     #select your sg samplesg
+SUBNET_ID = ''             #select subnet-id in which you want to launch instance
+SECURITY_GROUPS_IDS = ['']     #select your sg samplesg
 ELASTIC_IP = None                                  #If you need elastic ip to be attched to instance choose, ELASTIC_IP=True
 ROLE_PROFILE = 'AWS-S3-ACCESS'
-KEYPAIR = 'devopsvijay7'                           #create a keypair and give the name here
+KEYPAIR = ''                           #create a keypair and give the name here
  
 USERDATA_SCRIPT = """
 #! /bin/bash
@@ -56,7 +52,7 @@ sudo systemctl restart httpd.service
  
 def create_ec2_client():
     print("================================================================================")
-    print(f"Attempting to create EC2 Instance on {backend} Environment and {region} Region")
+    print(f"Attempting to create EC2 Instance in {region} Region")
     session = boto3.Session(region_name=region, profile_name=profile)
     ec2_client = session.client('ec2')
     return ec2_client
@@ -105,14 +101,6 @@ def create_ec2_instance_with_tags():
                                                         {
                                                             'Key': 'Name',
                                                             'Value': NAME
-                                                        },
-                                                        {
-                                                            'Key': 'Backend',
-                                                            'Value': backend
-                                                        },
-                                                        {
-                                                            'Key': 'Tenant',
-                                                            'Value': tenant
                                                         }
                                                     ]
                                                 },
@@ -181,14 +169,6 @@ def create_ec2_instance_with_tags():
                                                         {
                                                             'Key': 'Name',
                                                             'Value': NAME
-                                                        },
-                                                        {
-                                                            'Key': 'Backend',
-                                                            'Value': backend
-                                                        },
-                                                        {
-                                                            'Key': 'Tenant',
-                                                            'Value': tenant
                                                         }
                                                     ]
                                                 },
