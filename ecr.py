@@ -49,10 +49,10 @@ def create_ec2_client():
            }
            )
           print(f"{ecr_reg_id}.dkr.ecr.{region}.amazonaws.com/{repo}:{tag}")
-          custom_msg(f"Image Exists in {backend}")
+          custom_msg(f"Image Exists in {regio}")
 
       except Exception as error:
             print(f"{ecr_reg_id}.dkr.ecr.{region}.amazonaws.com/{repo}:{tag}")
-            custom_msg(f"Image doesn't Exists in {backend}")
+            custom_msg(f"Image doesn't Exists in {region}")
 
 create_ec2_client()
