@@ -2,8 +2,6 @@
 Export the Environment Variables before running the Script
 export AWS_REGION=us-west-2
 export AWS_PROFILE=test          #update your profile credentials in .aws/config file
-export AWS_BACKEND=Demo          #tag
-export AWS_TENANT=Test           #tag
 '''
 #PYTHON SCRIPT TO CHECK WHETHER IMAGE EXISTS IN ECR OR NOT
 
@@ -11,16 +9,14 @@ import os
 import sys
 import boto3
 
-REQUIRED_ENV_VARS = {"AWS_BACKEND", "AWS_TENANT", "AWS_PROFILE", "AWS_REGION"}
+REQUIRED_ENV_VARS = {"AWS_PROFILE", "AWS_REGION"}
 diff = REQUIRED_ENV_VARS.difference(os.environ)
 if len(diff) > 0:
     print('Failed because {} are not set'.format(diff))
     sys.exit(1)
 
 env_var = os.environ
-if {"AWS_BACKEND", "AWS_TENANT", "AWS_PROFILE", "AWS_REGION"} <= env_var.keys():
-    backend = os.environ['AWS_BACKEND']
-    tenant = os.environ['AWS_TENANT']
+if {"AWS_PROFILE", "AWS_REGION"} <= env_var.keys():
     profile = os.environ['AWS_PROFILE']
     region = os.environ['AWS_REGION']
 
@@ -32,7 +28,7 @@ def custom_msg(msg):
 
 def create_ec2_client():
       try:
-          print(f"Checking ECR image in {backend} Environment and {region} Region")
+          print(f"Checking ECR image in AWS {region} Region")
           repo=input("Enter Repository Name: ")
           tag=input("Enter the Tag: ")
           session = boto3.Session(region_name=region, profile_name=profile)
