@@ -49,7 +49,7 @@ def create_ec2_client():
            }
            )
           print(f"{ecr_reg_id}.dkr.ecr.{region}.amazonaws.com/{repo}:{tag}")
-          custom_msg(f"Image Exists in {regio}")
+          custom_msg(f"Image Exists in {region}")
 
       except Exception as error:
             print(f"{ecr_reg_id}.dkr.ecr.{region}.amazonaws.com/{repo}:{tag}")
